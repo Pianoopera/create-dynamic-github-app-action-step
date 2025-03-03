@@ -1,0 +1,45 @@
+name: "Create Action Step"
+description: "Create Action Step"
+author: "Pianoopera"
+inputs:
+  working-dir:
+    description: "working-dir"
+    required: true
+    default: "tmp"
+  step_name:
+    description: "step_name"
+    required: true
+    default: "Step hoge"
+  uses_action:
+    description: "uses_action"
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: "Pianoopera/create-dynamic-github-app-action-step"
+
+    # 改行入っちゃってうまく評価されない
+    - name: "Create Step"
+      shell: bash
+      working-directory: ${{ inputs.working-dir }}
+      run: |
+        cat <<EOF >> ./action.yml
+        runs:
+          using: "composite"
+          steps:
+            - name: "${{ inputs.step_name }}"
+              uses: ${{ inputs.uses_action }}
+              with:
+                app_id: inputs.app_id
+                private_key: inputs.private_key
+        EOF
+
+    - name: "Sed step"
+      shell: bash
+      working-directory: ${{ inputs.working-dir }}
+      run: |
+        sed -i 's/inputs\.app_id/\$\{\{\ inputs\.app_id \}\}/g' ./action.yml
+        sed -i 's/inputs\.private_key/\$\{\{\ inputs\.private_key \}\}/g' ./action.yml

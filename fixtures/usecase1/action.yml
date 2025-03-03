@@ -1,0 +1,9 @@
+name: "Dynamic Composite Action"
+description: "A dynamically generated composite action"
+inputs:
+  app_id:
+    description: "App ID"
+    required: true
+  private_key:
+    description: "Private key"
+    required: true

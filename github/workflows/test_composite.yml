@@ -1,0 +1,33 @@
+name: e2e test
+
+on:
+  push:
+    # branches:
+    #   - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Composite action local
+        uses: ./.github/actions
+        with:
+          working-dir: fixtures/usecase1
+          step_name: "Dynamic Step"
+          uses_action: ./fixtures/common
+
+      - name: "Cat target action file"
+        working-directory: ./fixtures/usecase1
+        run: |
+          cat ./action.yml
+
+      - name: Test call dynamic composite action
+        uses: ./fixtures/usecase1
+        with:
+          app_id: "hoge"
+          private_key: "fuga"

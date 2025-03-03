@@ -1,0 +1,16 @@
+name: "My Composite Action"
+description: "A composite action example"
+inputs:
+  app_id:
+    description: "App ID"
+    required: true
+  private_key:
+    description: "Private key"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: "Run a script"
+      shell: bash
+      run: |
+        echo "APP_ID, ${{ inputs.app_id }}"
