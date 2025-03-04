@@ -21,12 +21,20 @@ runs:
       with:
         repository: "Pianoopera/create-dynamic-github-app-action-step"
 
-    # 改行入っちゃってうまく評価されない
     - name: "Create Step"
       shell: bash
       working-directory: ${{ inputs.working-dir }}
       run: |
         cat <<EOF >> ./action.yml
+        name: "Dynamic Composite Action"
+        description: "A dynamically generated composite action"
+        inputs:
+          app_id:
+            description: "App ID"
+            required: true
+          private_key:
+            description: "Private key"
+            required: true
         outputs:
           token:
             description: "GitHub installation access token"
