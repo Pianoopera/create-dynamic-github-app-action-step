@@ -39,7 +39,7 @@ runs:
               if: always()
               with:
                 github_app_token: inputs.github_app_token
-          EOF
+        EOF
 
     - name: "Sed step"
       shell: bash
