@@ -1,0 +1,48 @@
+name: "Create Action Step"
+description: "Create Action Step"
+author: "Pianoopera"
+inputs:
+  working-dir:
+    description: "working-dir"
+    required: true
+    default: "tmp"
+  step_name:
+    description: "step_name"
+    required: true
+    default: "Step hoge"
+  github_app_token:
+    description: "github_app_token"
+    required: true
+  uses_action:
+    description: "uses_action"
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Create Step"
+      shell: bash
+      working-directory: ${{ inputs.working-dir }}
+      run: |
+        cat <<EOF >> ./action.yml
+        name: "Dynamic Composite Action"
+        description: "A dynamically generated composite action"
+        inputs:
+          github_app_token:
+            description: "github_app_token"
+            required: true
+        runs:
+          using: "composite"
+          steps:
+            - name: "${{ inputs.step_name }}"
+              uses: ${{ inputs.uses_action }}
+              if: always()
+              with:
+                github_app_token: inputs.github_app_token
+          EOF
+
+    - name: "Sed step"
+      shell: bash
+      working-directory: ${{ inputs.working-dir }}
+      run: |
+        sed -i 's/inputs\.github_app_token/\$\{\{\ inputs\.github_app_token \}\}/g' ./action.yml
