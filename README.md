@@ -13,6 +13,16 @@
     uses_action: ./fixtures/common # 実行したいComposite Action
 ```
 
+```yaml
+- name: Create dynamic action step for Delete IAToken
+  uses: ./.github/actions/delete_iat@main
+  if: always()
+    with:
+      working-dir: fixtures/delete_iat
+      step_name: "Delete a token step"
+      uses_action: .fixtures/common # 実行したいComposite Action
+```
+
 ## Develop
 
 ```shell
